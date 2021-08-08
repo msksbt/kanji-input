@@ -3,7 +3,9 @@
 ## 機能 Features
 
 Convert roman to Japanese Kanji.
+Visual Studio Code Extension.
 
+VisualStudioCodeの拡張機能です。
 ローマ字から、日本語、漢字への変換を行います。
 コーディング時の煩わしいIMEの切り替えが不要となります。
 
