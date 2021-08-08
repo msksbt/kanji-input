@@ -1,0 +1,114 @@
+{
+	"name": "kanji-input",
+	"displayName": "Kanji Input",
+	"description": "Kanji Input",
+	"publisher": "MSKJP",
+	"version": "0.0.1",
+	"license": "MIT",
+	"icon": "image/KanjiInput-icon-128.png",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/msksbt/kanji-input.git"
+	},
+	"engines": {
+		"vscode": "^1.58.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "kanji-input.convertToKanji",
+				"title": "Kanji Input:Convert to Kanji"
+			},
+			{
+				"command": "kanji-input.convertToKanjiPrev",
+				"title": "Kanji Input:Convert to Kanji previous"
+			},
+			{
+				"command": "kanji-input.convertToHiragana",
+				"title": "Kanji Input:Convert to Hiragana"
+			},
+			{
+				"command": "kanji-input.convertToKatakana",
+				"title": "Kanji Input:Convert to Katakana"
+			},
+			{
+				"command": "kanji-input.convertToFullWidth",
+				"title": "Kanji Input:Convert to Zenkaku"
+			},
+			{
+				"command": "kanji-input.convertToHalfWidth",
+				"title": "Kanji Input:Convert to Hankaku"
+			}
+		],
+		"keybindings": [
+			{
+				"command": "kanji-input.convertToKanji",
+				"key": "shift+ctrl+j",
+				"mac": "shift+ctrl+j",
+				"when": "editorTextFocus && !editorReadonly"
+			},
+			{
+				"command": "kanji-input.convertToKanjiPrev",
+				"key": "shift+ctrl+p",
+				"mac": "shift+ctrl+p",
+				"when": "editorTextFocus && !editorReadonly"
+			},
+			{
+				"command": "kanji-input.convertToHiragana",
+				"key": "shift+ctrl+h",
+				"mac": "shift+ctrl+h",
+				"when": "editorTextFocus && !editorReadonly"
+			},
+			{
+				"command": "kanji-input.convertToKatakana",
+				"key": "shift+ctrl+k",
+				"mac": "shift+ctrl+k",
+				"when": "editorTextFocus && !editorReadonly"
+			},
+			{
+				"command": "kanji-input.convertToFullWidth",
+				"key": "shift+ctrl+l",
+				"mac": "shift+ctrl+l",
+				"when": "editorTextFocus && !editorReadonly"
+			},
+			{
+				"command": "kanji-input.convertToHalfWidth",
+				"key": "shift+ctrl+;",
+				"mac": "shift+ctrl+;",
+				"when": "editorTextFocus && !editorReadonly"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "yarn run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "yarn run compile && yarn run lint",
+		"lint": "eslint src --ext ts",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/glob": "^7.1.3",
+		"@types/mocha": "^8.2.2",
+		"@types/node": "14.x",
+		"@types/node-fetch": "^2.5.12",
+		"@types/vscode": "^1.58.0",
+		"@typescript-eslint/eslint-plugin": "^4.26.0",
+		"@typescript-eslint/parser": "^4.26.0",
+		"eslint": "^7.27.0",
+		"glob": "^7.1.7",
+		"mocha": "^8.4.0",
+		"typescript": "^4.3.2",
+		"vscode-test": "^1.5.2"
+	},
+	"dependencies": {
+		"node-fetch": "^2.6.1"
+	}
+}
