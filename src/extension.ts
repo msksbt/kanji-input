@@ -272,8 +272,11 @@ export function activate(context: vscode.ExtensionContext) {
 			const conversion = recentKanaConversions[kanaIndex];
 			const kanji = conversion.kanji;
 			pushRecentKana(hiragana, kanji, conversion.converted, recentKanaConversions);
-			pushRecentKanji(kanji, conversion.converted, recentKanjiConversions);
-			return kanji;
+			if (kanji !== undefined) {
+				pushRecentKanji(kanji, conversion.converted, recentKanjiConversions);
+				return kanji;
+			}
+			return conversion.kana;
 		}
 
 		const kanjiConverted: KanjiConvertedList = await googleTransliterate(hiragana);
@@ -284,12 +287,18 @@ export function activate(context: vscode.ExtensionContext) {
 			const kanji = element.candidates[0];
 
 			pushRecentKana(element.kana, kanji, element, recentKanaConversions);
-			pushRecentKanji(kanji, element, recentKanjiConversions);
+			if (kanji !== undefined) {
+				pushRecentKanji(kanji, element, recentKanjiConversions);
+			}
 		});
 
 		kanjiConverted.forEach((element) => {
 			const kanji = element.candidates[0];
-			kanjiString += kanji;
+			if (kanji !== undefined) {
+				kanjiString += kanji;
+			} else {
+				kanjiString += element.kana;
+			}
 		});
 		return kanjiString;
 	}
@@ -307,7 +316,7 @@ export function activate(context: vscode.ExtensionContext) {
 			range = normarizeRange(editor, selection, getRomanWordRange);
 			if (range !== null) {
 				const text = editor.document.getText(range);
-				const hiragana = convertRomanToHiragana(text);
+				const hiragana = convertRomanToHiragana(text).trim();
 
 				let kanjiString = await transliterateKanji(hiragana);
 
@@ -398,7 +407,7 @@ export function activate(context: vscode.ExtensionContext) {
 			range = normarizeRange(editor, selection, getRomanWordRange);
 			if (range !== null) {
 				const text = editor.document.getText(range);
-				const hiragana = convertRomanToHiragana(text);
+				const hiragana = convertRomanToHiragana(text).trim();
 				return { range: range, replaced: hiragana };
 			}
 			range = normarizeRange(editor, selection, getKatakanaWordRange);
@@ -425,7 +434,7 @@ export function activate(context: vscode.ExtensionContext) {
 			range = normarizeRange(editor, selection, getRomanWordRange);
 			if (range !== null) {
 				const text = editor.document.getText(range);
-				const hiragana = convertRomanToHiragana(text);
+				const hiragana = convertRomanToHiragana(text).trim();
 				const katakana = hiraganaToKatakana(hiragana);
 				return { range: range, replaced: katakana };
 			}
