@@ -19,6 +19,8 @@ suite('Extension Test Suite', () => {
 	test('REGEX test', () => {
 		let testString = 'aiuあaiu-e[]o.';
 		assert.strictEqual(__extension.getLastWordCaracter(testString, __extension.REGEX_ROMAN), 4);
+		testString = 'aiuあa iu-e[]o.';
+		assert.strictEqual(__extension.getLastWordCaracter(testString, __extension.REGEX_ROMAN), 5);
 		testString = 'aiuあaiu-e[]o.あ';
 		assert.strictEqual(__extension.getLastWordCaracter(testString, __extension.REGEX_ROMAN), undefined);
 		testString = 'ひらカタカナひらがな「」ー〜、。';
