@@ -272,8 +272,11 @@ export function activate(context: vscode.ExtensionContext) {
 			const conversion = recentKanaConversions[kanaIndex];
 			const kanji = conversion.kanji;
 			pushRecentKana(hiragana, kanji, conversion.converted, recentKanaConversions);
-			pushRecentKanji(kanji, conversion.converted, recentKanjiConversions);
-			return kanji;
+			if (kanji !== undefined) {
+				pushRecentKanji(kanji, conversion.converted, recentKanjiConversions);
+				return kanji;
+			}
+			return conversion.kana;
 		}
 
 		const kanjiConverted: KanjiConvertedList = await googleTransliterate(hiragana);
@@ -284,12 +287,18 @@ export function activate(context: vscode.ExtensionContext) {
 			const kanji = element.candidates[0];
 
 			pushRecentKana(element.kana, kanji, element, recentKanaConversions);
-			pushRecentKanji(kanji, element, recentKanjiConversions);
+			if (kanji !== undefined) {
+				pushRecentKanji(kanji, element, recentKanjiConversions);
+			}
 		});
 
 		kanjiConverted.forEach((element) => {
 			const kanji = element.candidates[0];
-			kanjiString += kanji;
+			if (kanji !== undefined) {
+				kanjiString += kanji;
+			} else {
+				kanjiString += element.kana;
+			}
 		});
 		return kanjiString;
 	}
