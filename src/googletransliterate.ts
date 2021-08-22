@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import { KanjiConverted, KanjiConvertedList } from "./extension";
 
-const REGEX_HIRAKANA = /^[\u3040-\u309F\u30A0-\u30FF「」ー〜、。]+$/;
+const REGEX_HIRAKANA = /^[\u3040-\u309F\u30A0-\u30FF「」ー～〜、。]+$/;
 const REGEX_HALF = /[!-~ｦ-ﾝ]/;
 
 const callTransliterate = async (hiragana: string): Promise<Array<[string, string[]]>> => {
