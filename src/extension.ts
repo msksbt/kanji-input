@@ -202,6 +202,9 @@ interface ReplaceText {
 type ReplaceTexts = ReplaceText[];
 
 const replaceTextMulti = (editor: vscode.TextEditor, replaces: ReplaceTexts) => {
+	if (replaces.length <= 0) {
+		return;
+	}
 	editor.edit(function (editBuilder) {
 		replaces.forEach((replaced) => {
 			editBuilder.replace(replaced.range, replaced.replaced);
@@ -261,8 +264,6 @@ const normarizeKanjiRange = (editor: vscode.TextEditor, range: vscode.Range, rec
 export function activate(context: vscode.ExtensionContext) {
 	const recentKanjiConversions: RecentKanjiConversionList = [];
 	const recentKanaConversions: RecentKanaConversionList = [];
-
-	debugLog('kanji-input activated');
 
 	const transliterateKanji = async (hiragana: string): Promise<string> => {
 

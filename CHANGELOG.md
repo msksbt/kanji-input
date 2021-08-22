@@ -1,6 +1,8 @@
 # Change Log
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+## [Unreleased]
+
+- 編集対象がない時に、不必要にeditメソッドを実行しないように修正
 
 ## [0.0.2] - 2021-08-10
 
