@@ -405,6 +405,14 @@ export function activate(context: vscode.ExtensionContext) {
 
 		const replaces: ReplaceTexts = selections.map((selection): ReplaceText | undefined => {
 			let range: vscode.Range | null;
+			range = normarizeKanjiRange(editor, selection, recentKanjiConversions);
+			if (range !== null && range.end.isEqual(selection.end)) {
+				const text = editor.document.getText(range);
+				const converted = convertKanjiToHiragana(text, recentKanjiConversions);
+				if (converted !== null) {
+					return { range: range, replaced: converted.kana };
+				}
+			}
 			range = normarizeRange(editor, selection, getRomanWordRange);
 			if (range !== null) {
 				const text = editor.document.getText(range);
