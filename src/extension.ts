@@ -71,15 +71,14 @@ const findKanjiRecent = (text: string, recentConversions: RecentKanjiConversionL
 	const result = recentConversions.map((value) => {
 		const index = textReversed.indexOf(value.kanjiReversed);
 		if (index < 0) {
-			return { index: Number.MAX_SAFE_INTEGER, recentConversion: undefined };
+			return { index: Number.MAX_SAFE_INTEGER, length: 0, recentConversion: undefined };
 		}
-		return { index: index, recentConversion: value };
-	}).reduce((a, b) => (a.index < b.index) ? a : b);
+		return { index: index, length: value.kanjiReversed.length, recentConversion: value };
+	}).reduce((a, b) => (a.index < b.index) ? a : (a.index === b.index && a.length >= b.length) ? a : b);
 
 	if (result.recentConversion === undefined) {
 		return { index: -1, recentConversion: undefined };
 	}
-
 	return { index: text.length - result.index - result.recentConversion.kanji.length, recentConversion: result.recentConversion };
 }
 
