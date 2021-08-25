@@ -173,6 +173,17 @@ suite('Extension Test Suite', () => {
 		assert.deepStrictEqual(__extension.findKanjiRecent('今日は漢字今日は', recent1), { index: 5, recentConversion: recent1[1] });
 		assert.deepStrictEqual(__extension.findKanjiRecent('今日は良い漢字', recent1), { index: 3, recentConversion: recent1[2] });
 		assert.deepStrictEqual(__extension.findKanjiRecent('今日は漢字', recent1), { index: 3, recentConversion: recent1[0] });
+
+		const recent2: RecentKanjiConversionList = [
+			{ kanji: "漢字", kanjiReversed: "字漢", converted: { kana: "かんじ", candidates: ["漢字"] } },
+		];
+
+		assert.deepStrictEqual(__extension.findKanjiRecent('天気', recent1), { index: - 1, recentConversion: undefined });
+		assert.deepStrictEqual(__extension.findKanjiRecent('漢字', recent1), { index: 0, recentConversion: recent1[0] });
+		assert.deepStrictEqual(__extension.findKanjiRecent('今日の漢字', recent1), { index: 3, recentConversion: recent1[0] });
+
+		const recent3: RecentKanjiConversionList = [];
+		assert.deepStrictEqual(__extension.findKanjiRecent('天気', recent1), { index: - 1, recentConversion: undefined });
 	});
 
 	test('KanjiToHiragana test', () => {

@@ -60,21 +60,16 @@ type FoundRecentKanji = {
 };
 
 const findKanjiRecent = (text: string, recentConversions: RecentKanjiConversionList): FoundRecentKanji => {
-	if (recentConversions.length < 1) {
-		return { index: -1, recentConversion: undefined };
-	}
-	if (recentConversions.length < 2) {
-		return { index: 0, recentConversion: recentConversions[0] };
-	}
+	const initialValue = { index: Number.MAX_SAFE_INTEGER, length: 0, recentConversion: undefined };
 
 	const textReversed = text.split('').reverse().join('');
 	const result = recentConversions.map((value) => {
 		const index = textReversed.indexOf(value.kanjiReversed);
 		if (index < 0) {
-			return { index: Number.MAX_SAFE_INTEGER, length: 0, recentConversion: undefined };
+			return initialValue;
 		}
 		return { index: index, length: value.kanjiReversed.length, recentConversion: value };
-	}).reduce((a, b) => (a.index < b.index) ? a : (a.index === b.index && a.length >= b.length) ? a : b);
+	}).reduce((a, b) => (a.index < b.index) ? a : (a.index === b.index && a.length >= b.length) ? a : b, initialValue);
 
 	if (result.recentConversion === undefined) {
 		return { index: -1, recentConversion: undefined };
