@@ -20,6 +20,8 @@ suite('Extension Test Suite', () => {
 		let testString = 'aiuあaiu-e[]o.';
 		assert.strictEqual(__extension.getLastWordCaracter(testString, __extension.REGEX_ROMAN), 4);
 		testString = 'aiuあa iu-e[]o.';
+		assert.strictEqual(__extension.getLastWordCaracter(testString, __extension.REGEX_ROMAN), 6);
+		testString = 'aiuあaAiu-e[]o.';
 		assert.strictEqual(__extension.getLastWordCaracter(testString, __extension.REGEX_ROMAN), 5);
 		testString = 'aiuあaiu-e[]o.あ';
 		assert.strictEqual(__extension.getLastWordCaracter(testString, __extension.REGEX_ROMAN), undefined);

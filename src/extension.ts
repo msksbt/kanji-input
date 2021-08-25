@@ -141,7 +141,7 @@ const getPrevKanji = (kana: string, prevKanji: string, kanjiConverted: KanjiConv
 	return kanjiConverted.candidates[(prevIndex + kanjiConverted.candidates.length - 1) % kanjiConverted.candidates.length];
 }
 
-const REGEX_ROMAN = / ?[a-zA-Z0-9,\.\-~[\];\/]+$/;
+const REGEX_ROMAN = /[A-Z]?[a-z0-9,\.\-~[\];\/]+$/;
 const REGEX_ASCII = /[!-~]+$/;
 const REGEX_FULLWIDTH = /[！-\uFF5E]+$/;
 const REGEX_HIRAGANA = /[\u3040-\u309F「」ー〜、。]+$/;
