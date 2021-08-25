@@ -3,7 +3,7 @@
 	"displayName": "Kanji Input",
 	"description": "Kanji Input",
 	"publisher": "mskjp",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"license": "MIT",
 	"icon": "image/KanjiInput-icon-128.png",
 	"repository": {
