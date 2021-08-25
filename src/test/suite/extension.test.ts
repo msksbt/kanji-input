@@ -20,6 +20,8 @@ suite('Extension Test Suite', () => {
 		let testString = 'aiuあaiu-e[]o.';
 		assert.strictEqual(__extension.getLastWordCaracter(testString, __extension.REGEX_ROMAN), 4);
 		testString = 'aiuあa iu-e[]o.';
+		assert.strictEqual(__extension.getLastWordCaracter(testString, __extension.REGEX_ROMAN), 6);
+		testString = 'aiuあaAiu-e[]o.';
 		assert.strictEqual(__extension.getLastWordCaracter(testString, __extension.REGEX_ROMAN), 5);
 		testString = 'aiuあaiu-e[]o.あ';
 		assert.strictEqual(__extension.getLastWordCaracter(testString, __extension.REGEX_ROMAN), undefined);
@@ -163,6 +165,7 @@ suite('Extension Test Suite', () => {
 		const recent1: RecentKanjiConversionList = [
 			{ kanji: "漢字", kanjiReversed: "字漢", converted: { kana: "かんじ", candidates: ["漢字"] } },
 			{ kanji: "今日は", kanjiReversed: "は日今", converted: { kana: "きょうは", candidates: ["今日は"] } },
+			{ kanji: "良い漢字", kanjiReversed: "字漢い良", converted: { kana: "よいかんじ", candidates: ["良い漢字"] } },
 		];
 
 		assert.deepStrictEqual(__extension.findKanjiRecent('今日は', recent1), { index: 0, recentConversion: recent1[1] });
@@ -170,6 +173,19 @@ suite('Extension Test Suite', () => {
 		assert.deepStrictEqual(__extension.findKanjiRecent('天気', recent1), { index: - 1, recentConversion: undefined });
 		assert.deepStrictEqual(__extension.findKanjiRecent('今日は漢字あ', recent1), { index: 3, recentConversion: recent1[0] });
 		assert.deepStrictEqual(__extension.findKanjiRecent('今日は漢字今日は', recent1), { index: 5, recentConversion: recent1[1] });
+		assert.deepStrictEqual(__extension.findKanjiRecent('今日は良い漢字', recent1), { index: 3, recentConversion: recent1[2] });
+		assert.deepStrictEqual(__extension.findKanjiRecent('今日は漢字', recent1), { index: 3, recentConversion: recent1[0] });
+
+		const recent2: RecentKanjiConversionList = [
+			{ kanji: "漢字", kanjiReversed: "字漢", converted: { kana: "かんじ", candidates: ["漢字"] } },
+		];
+
+		assert.deepStrictEqual(__extension.findKanjiRecent('天気', recent1), { index: - 1, recentConversion: undefined });
+		assert.deepStrictEqual(__extension.findKanjiRecent('漢字', recent1), { index: 0, recentConversion: recent1[0] });
+		assert.deepStrictEqual(__extension.findKanjiRecent('今日の漢字', recent1), { index: 3, recentConversion: recent1[0] });
+
+		const recent3: RecentKanjiConversionList = [];
+		assert.deepStrictEqual(__extension.findKanjiRecent('天気', recent1), { index: - 1, recentConversion: undefined });
 	});
 
 	test('KanjiToHiragana test', () => {

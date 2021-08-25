@@ -60,26 +60,20 @@ type FoundRecentKanji = {
 };
 
 const findKanjiRecent = (text: string, recentConversions: RecentKanjiConversionList): FoundRecentKanji => {
-	if (recentConversions.length < 1) {
-		return { index: -1, recentConversion: undefined };
-	}
-	if (recentConversions.length < 2) {
-		return { index: 0, recentConversion: recentConversions[0] };
-	}
+	const initialValue = { index: Number.MAX_SAFE_INTEGER, length: 0, recentConversion: undefined };
 
 	const textReversed = text.split('').reverse().join('');
 	const result = recentConversions.map((value) => {
 		const index = textReversed.indexOf(value.kanjiReversed);
 		if (index < 0) {
-			return { index: Number.MAX_SAFE_INTEGER, recentConversion: undefined };
+			return initialValue;
 		}
-		return { index: index, recentConversion: value };
-	}).reduce((a, b) => (a.index < b.index) ? a : b);
+		return { index: index, length: value.kanjiReversed.length, recentConversion: value };
+	}).reduce((a, b) => (a.index < b.index) ? a : (a.index === b.index && a.length >= b.length) ? a : b, initialValue);
 
 	if (result.recentConversion === undefined) {
 		return { index: -1, recentConversion: undefined };
 	}
-
 	return { index: text.length - result.index - result.recentConversion.kanji.length, recentConversion: result.recentConversion };
 }
 
@@ -147,7 +141,7 @@ const getPrevKanji = (kana: string, prevKanji: string, kanjiConverted: KanjiConv
 	return kanjiConverted.candidates[(prevIndex + kanjiConverted.candidates.length - 1) % kanjiConverted.candidates.length];
 }
 
-const REGEX_ROMAN = / ?[a-zA-Z0-9,\.\-[\];\()\/]+$/;
+const REGEX_ROMAN = /[A-Z]?[a-z0-9,\.\-~[\];\/]+$/;
 const REGEX_ASCII = /[!-~]+$/;
 const REGEX_FULLWIDTH = /[！-\uFF5E]+$/;
 const REGEX_HIRAGANA = /[\u3040-\u309F「」ー〜、。]+$/;
@@ -405,6 +399,14 @@ export function activate(context: vscode.ExtensionContext) {
 
 		const replaces: ReplaceTexts = selections.map((selection): ReplaceText | undefined => {
 			let range: vscode.Range | null;
+			range = normarizeKanjiRange(editor, selection, recentKanjiConversions);
+			if (range !== null && range.end.isEqual(selection.end)) {
+				const text = editor.document.getText(range);
+				const converted = convertKanjiToHiragana(text, recentKanjiConversions);
+				if (converted !== null) {
+					return { range: range, replaced: converted.kana };
+				}
+			}
 			range = normarizeRange(editor, selection, getRomanWordRange);
 			if (range !== null) {
 				const text = editor.document.getText(range);
